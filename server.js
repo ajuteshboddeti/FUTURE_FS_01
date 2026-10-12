@@ -121,7 +121,7 @@ const contactValidationRules = [
     .withMessage('Message cannot exceed 2000 characters.')
 ];
 
-app.post('/api/contact', contactLimiter, contactValidationRules, async (req, res) => {
+app.post(['/api/contact', '/contact'], contactLimiter, contactValidationRules, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
