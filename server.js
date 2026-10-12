@@ -166,19 +166,25 @@ app.post(['/api/contact', '/contact'], contactLimiter, contactValidationRules, a
 
     if (transporter) {
       const recipient = process.env.EMAIL_TO || process.env.EMAIL_USER;
+      const formattedTime = new Date().toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        dateStyle: 'medium',
+        timeStyle: 'medium'
+      }) + ' IST';
+
       const mailOptions = {
         from: `"${name}" <${process.env.EMAIL_USER}>`,
         replyTo: email,
         to: recipient,
         subject: `New Portfolio Message from ${name}`,
-        text: `You have received a new contact submission:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nTime: ${new Date().toLocaleString()}\nIP: ${clientIp}\n\nMessage:\n${message}\n`,
+        text: `You have received a new contact submission:\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nTime: ${formattedTime}\nIP: ${clientIp}\n\nMessage:\n${message}\n`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #0f0f0f; color: #f4f4f0; border-radius: 12px; border: 1px solid #262624;">
             <h2 style="color: #cead07; border-bottom: 1px solid #262624; padding-bottom: 12px; margin-top: 0;">New Contact Inquiry</h2>
             <p style="margin: 8px 0;"><strong>Name:</strong> ${name}</p>
             <p style="margin: 8px 0;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #cead07;">${email}</a></p>
             <p style="margin: 8px 0;"><strong>Phone:</strong> ${phone ? phone : '<em>Not provided</em>'}</p>
-            <p style="margin: 8px 0;"><strong>Time:</strong> ${new Date().toLocaleString()}</p>
+            <p style="margin: 8px 0;"><strong>Time:</strong> ${formattedTime}</p>
             <div style="margin-top: 20px; padding: 15px; background: #1c1d1d; border-radius: 8px; border-left: 4px solid #cead07;">
               <p style="margin: 0; font-weight: bold; color: #cead07; margin-bottom: 8px;">Message:</p>
               <p style="margin: 0; line-height: 1.6; white-space: pre-wrap;">${message}</p>
